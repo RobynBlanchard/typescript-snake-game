@@ -10,7 +10,12 @@ const init = () => {
 
   const canvas = new Canvas(canvasWidth, canvasHeight, canvasSelector, cellWidth);
   const snake = new Snake(snakeWidth, canvas);
+
+  document.addEventListener('keydown', function(e) {
+    snake.setDirection(e);
+  });
   snake.init();
+
 
   // setInterval(function() {
   //   snake.move()

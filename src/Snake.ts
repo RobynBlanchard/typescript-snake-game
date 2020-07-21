@@ -1,6 +1,5 @@
 import { Canvas } from './Canvas';
 import { CoOrdinate } from './CoOrdinate';
-
 export class Snake {
   snake: CoOrdinate[];
   direction: string;
@@ -12,7 +11,7 @@ export class Snake {
         y: 0,
       },
     ];
-    this.direction = 'right';
+    this.direction = 'ArrowRight';
   }
 
   init() {
@@ -21,18 +20,18 @@ export class Snake {
 
   move() {
     let nextHeadPosition = Object.assign({}, this.snake[0]);
-
+    console.log('DURECTION', this.direction)
     switch (this.direction) {
-      case 'left':
+      case 'ArrowLeft':
         nextHeadPosition.x--;
         break;
-      case 'right':
+      case 'ArrowRight':
         nextHeadPosition.x++;
         break;
-      case 'up':
+      case 'ArrowUp':
         nextHeadPosition.y--;
         break;
-      case 'down':
+      case 'ArrowDown':
         nextHeadPosition.y++;
         break;
       default:
@@ -60,7 +59,23 @@ export class Snake {
     // this.moveSnakeForward();
   }
 
+  setDirection(e: KeyboardEvent) {
+    let directionCodeStr: string = e.key;
+
+    const arrowKeyPressed =
+      ['ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'].indexOf(
+        directionCodeStr
+      ) !== -1;
+    const directionHasChanged = directionCodeStr !== this.direction;
+
+    if (arrowKeyPressed && directionHasChanged) {
+      console.log('directionCodeStr', directionCodeStr)
+      this.direction = directionCodeStr;
+    }
+  }
+
   private extendHead(newHead: CoOrdinate) {
+    // console.log('extend head', newHead)
     this.snake.unshift(Object.assign({}, newHead));
     this.canvas.drawSnake(1, newHead);
   }
