@@ -3,6 +3,7 @@ import { CoOrdinate } from './CoOrdinate';
 export class Snake {
   snake: CoOrdinate[];
   direction: string;
+  nextPosition: CoOrdinate;
 
   constructor(public width: number, public canvas: Canvas) {
     this.snake = [
@@ -20,13 +21,26 @@ export class Snake {
       },
     ];
     this.direction = 'ArrowRight';
+    this.nextPosition = {
+      x: 3,
+      y: 0
+    }
   }
 
   init() {
     this.canvas.draw(this.snake.length, this.snake[this.snake.length - 1]);
   }
 
+  extend() {
+    this.extendHead(this.nextPosition);
+  }
+
   move() {
+    this.extendHead(this.nextPosition);
+    this.removeTail();
+  }
+
+  getNextPosition() {
     let nextHeadPosition = Object.assign({}, this.snake[0]);
     console.log('DIRECTION', this.direction);
     switch (this.direction) {
@@ -45,26 +59,9 @@ export class Snake {
       default:
         console.log('not a valid direction');
     }
+    this.nextPosition = nextHeadPosition;
 
-    this.extendHead(nextHeadPosition);
-    this.removeTail();
-
-    //   if (collisionDetection(newPosition.x, newPosition.y)) {
-    //     return;
-    //   }
-
-    //   if (foodCollision(newPosition.x * 10, newPosition.y * 10)) {
-    //     // add to snake tail
-    //     snakeLength++;
-    //     increaseScore();
-
-    //     // set new food position
-    //     curFoodPosition = getFoodCoords();
-    //     drawBlob(curFoodPosition.x, curFoodPosition.y, 'rgb(0,0,255)');
-    //   }
-
-    // this.snakeHeadPosition = nextHeadPosition;
-    // this.moveSnakeForward();
+    return nextHeadPosition;
   }
 
   setDirection(e: KeyboardEvent) {
@@ -92,6 +89,10 @@ export class Snake {
     }
     return false;
   }
+
+  // private foodCollision() {
+  //   return this.snake[0].x === food.x && this.snake[0].y === food.y;
+  // }
 
   private extendHead(newHead: CoOrdinate) {
     this.snake.unshift(Object.assign({}, newHead));
