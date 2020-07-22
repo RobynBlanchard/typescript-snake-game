@@ -7,6 +7,14 @@ export class Snake {
   constructor(public width: number, public canvas: Canvas) {
     this.snake = [
       {
+        x: 2,
+        y: 0,
+      },
+      {
+        x: 1,
+        y: 0,
+      },
+      {
         x: 0,
         y: 0,
       },
@@ -15,12 +23,12 @@ export class Snake {
   }
 
   init() {
-    this.canvas.draw(this.snake.length, this.snake[0]);
+    this.canvas.draw(this.snake.length, this.snake[this.snake.length - 1]);
   }
 
   move() {
     let nextHeadPosition = Object.assign({}, this.snake[0]);
-    console.log('DURECTION', this.direction);
+    console.log('DIRECTION', this.direction);
     switch (this.direction) {
       case 'ArrowLeft':
         nextHeadPosition.x--;

@@ -26,7 +26,7 @@ const init = () => {
 
   // setInterval(function() {
   //   snake.move()
-  // }, 1000);
+  // }, 50);
   // snake.move();
 };
 
