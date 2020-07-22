@@ -23,8 +23,8 @@ export class Snake {
     this.direction = 'ArrowRight';
     this.nextPosition = {
       x: 3,
-      y: 0
-    }
+      y: 0,
+    };
   }
 
   init() {
@@ -42,7 +42,6 @@ export class Snake {
 
   getNextPosition() {
     let nextHeadPosition = Object.assign({}, this.snake[0]);
-    console.log('DIRECTION', this.direction);
     switch (this.direction) {
       case 'ArrowLeft':
         nextHeadPosition.x--;
@@ -72,8 +71,13 @@ export class Snake {
         directionCodeStr
       ) !== -1;
     const directionHasChanged = directionCodeStr !== this.direction;
+    const inValidDirectionChange =
+      (this.direction === 'ArrowLeft' && directionCodeStr === 'ArrowRight') ||
+      (this.direction === 'ArrowRight' && directionCodeStr === 'ArrowLeft') ||
+      (this.direction === 'ArrowUp' && directionCodeStr === 'ArrowDown') ||
+      (this.direction === 'ArrowDown' && directionCodeStr === 'ArrowUp');
 
-    if (arrowKeyPressed && directionHasChanged) {
+    if (arrowKeyPressed && directionHasChanged && !inValidDirectionChange) {
       this.direction = directionCodeStr;
     }
   }
@@ -90,18 +94,12 @@ export class Snake {
     return false;
   }
 
-  // private foodCollision() {
-  //   return this.snake[0].x === food.x && this.snake[0].y === food.y;
-  // }
-
   private extendHead(newHead: CoOrdinate) {
     this.snake.unshift(Object.assign({}, newHead));
     this.canvas.draw(1, newHead);
   }
 
   private removeTail() {
-    console.log('remove tails');
-
     const tailCoOrd = this.snake.pop();
     if (tailCoOrd) {
       this.canvas.erase(tailCoOrd);
