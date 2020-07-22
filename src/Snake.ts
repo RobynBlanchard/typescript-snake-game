@@ -15,12 +15,12 @@ export class Snake {
   }
 
   init() {
-    this.canvas.drawSnake(this.snake.length, this.snake[0]);
+    this.canvas.draw(this.snake.length, this.snake[0]);
   }
 
   move() {
     let nextHeadPosition = Object.assign({}, this.snake[0]);
-    console.log('DURECTION', this.direction)
+    console.log('DURECTION', this.direction);
     switch (this.direction) {
       case 'ArrowLeft':
         nextHeadPosition.x--;
@@ -69,15 +69,25 @@ export class Snake {
     const directionHasChanged = directionCodeStr !== this.direction;
 
     if (arrowKeyPressed && directionHasChanged) {
-      console.log('directionCodeStr', directionCodeStr)
       this.direction = directionCodeStr;
     }
   }
 
+  willCollide(coOrdinate: CoOrdinate) {
+    for (var i = 0; i < this.snake.length; i++) {
+      if (
+        this.snake[i].x === coOrdinate.x &&
+        this.snake[i].y === coOrdinate.y
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   private extendHead(newHead: CoOrdinate) {
-    // console.log('extend head', newHead)
     this.snake.unshift(Object.assign({}, newHead));
-    this.canvas.drawSnake(1, newHead);
+    this.canvas.draw(1, newHead);
   }
 
   private removeTail() {

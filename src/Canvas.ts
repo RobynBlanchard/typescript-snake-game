@@ -15,15 +15,14 @@ export class Canvas {
     ) as HTMLCanvasElement;
   }
 
-  // draw
-  drawSnake(length: number, startingPosition: CoOrdinate) {
+  draw(length: number, headPosition: CoOrdinate, color: string = green) {
     if (this.canvas.getContext) {
       let ctx = this.canvas.getContext('2d');
       if (ctx) {
-        ctx.fillStyle = green;
+        ctx.fillStyle = color;
         ctx.fillRect(
-          startingPosition.x * this.cellWidth,
-          startingPosition.y * this.cellWidth,
+          headPosition.x * this.cellWidth,
+          headPosition.y * this.cellWidth,
           length * this.cellWidth,
           this.cellWidth,
         );
