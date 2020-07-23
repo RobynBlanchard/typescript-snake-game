@@ -10,6 +10,7 @@ export class Game {
   canvas: Canvas;
   snake: Snake;
   food: Food;
+  gameLoop: NodeJS.Timeout | undefined;
   constructor() {
     this.gridWidth = 30;
     this.gridSelector = '#canvas';
@@ -36,7 +37,7 @@ export class Game {
 
     // todo - collision detection for snake and grid
 
-    setInterval(() => {
+    this.gameLoop = setInterval(() => {
       const nextPos = this.snake.getNextPosition();
 
       if (this.foodCollision(nextPos)) {
@@ -44,9 +45,12 @@ export class Game {
         this.food.generate();
       } else if (this.gridCollision(nextPos)) {
         console.log('collision, do nothing');
+        // pause interval ???
       } else if (this.snake.willCollide(nextPos)) {
+        if (this.gameLoop) {
+          clearInterval(this.gameLoop)
+        }
         throw new Error('game over');
-        // TODO clear interval
       } else {
         this.snake.move();
       }
