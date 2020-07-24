@@ -37,6 +37,7 @@ export class Game {
 
     // todo - collision detection for snake and grid
 
+    // todo decrease time as game goes on
     this.gameLoop = setInterval(() => {
       const nextPos = this.snake.getNextPosition();
 
