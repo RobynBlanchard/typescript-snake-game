@@ -1,6 +1,7 @@
 import { Canvas } from './Canvas';
 import { Snake } from './Snake';
 import { Food } from './Food';
+import { Score } from './Score';
 import { CoOrdinate } from './CoOrdinate';
 
 export class Game {
@@ -10,6 +11,7 @@ export class Game {
   canvas: Canvas;
   snake: Snake;
   food: Food;
+  score: Score;
   gameLoop: NodeJS.Timeout | undefined;
   constructor() {
     this.gridWidth = 30;
@@ -23,6 +25,7 @@ export class Game {
     );
     this.snake = new Snake(this.cellWidth, this.canvas);
     this.food = new Food(this.canvas, this.snake);
+    this.score = new Score();
   }
 
   init() {
@@ -44,6 +47,7 @@ export class Game {
       if (this.foodCollision(nextPos)) {
         this.snake.extend();
         this.food.generate();
+        this.score.increment();
       } else if (this.gridCollision(nextPos)) {
         console.log('collision, do nothing');
         // pause interval ???
@@ -55,7 +59,7 @@ export class Game {
       } else {
         this.snake.move();
       }
-    }, 200);
+    }, 50);
   }
 
   private foodCollision(nextPos: CoOrdinate) {
