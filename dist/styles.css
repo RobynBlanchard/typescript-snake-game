@@ -66,9 +66,27 @@ leaderboard ul {
       'header      header  header header header'
       'leaderboard   score   score pause other'
       'leaderboard    content content content other'
-      'leaderboard    content content content other'
+      'leaderboard    content content content other';
   }
   .leaderboard ol {
     flex-direction: column;
   }
 }
+
+@keyframes zoom {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(4);
+  }
+}
+
+.game-over {
+  display: none;
+  position: absolute;
+  color: red;
+  transform: scale(4);
+  animation: zoom 1s;
+}
+

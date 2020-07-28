@@ -3,7 +3,6 @@ import { Snake } from './Snake';
 import { Food } from './Food';
 import { Score } from './Score';
 import { CoOrdinate } from './CoOrdinate';
-
 export class Game {
   gridWidth: number;
   cellWidth: number;
@@ -55,11 +54,18 @@ export class Game {
         if (this.gameLoop) {
           clearInterval(this.gameLoop)
         }
-        throw new Error('game over');
+        this.endGame();
       } else {
         this.snake.move();
       }
     }, 50);
+  }
+
+  endGame() {
+    const gameOver = document.querySelector('.game-over') as HTMLElement;
+    if (gameOver) {
+      gameOver.style.display = 'block';
+    }
   }
 
   private foodCollision(nextPos: CoOrdinate) {
