@@ -3,6 +3,9 @@ import { Snake } from './Snake';
 import { Food } from './Food';
 import { Score } from './Score';
 import { CoOrdinate } from './CoOrdinate';
+
+// or interface Snake - method for move, collisin etc
+
 export class Game {
   gridWidth: number;
   cellWidth: number;
@@ -37,8 +40,6 @@ export class Game {
       this.snake.setDirection(e);
     });
 
-    // todo - collision detection for snake and grid
-
     // todo decrease time as game goes on
     this.gameLoop = setInterval(() => {
       const nextPos = this.snake.getNextPosition();
@@ -47,13 +48,7 @@ export class Game {
         this.snake.extend();
         this.food.generate();
         this.score.increment();
-      } else if (this.gridCollision(nextPos)) {
-        console.log('collision, do nothing');
-        // pause interval ???
       } else if (this.snake.willCollide(nextPos)) {
-        if (this.gameLoop) {
-          clearInterval(this.gameLoop)
-        }
         this.endGame();
       } else {
         this.snake.move();
@@ -62,6 +57,9 @@ export class Game {
   }
 
   endGame() {
+    if (this.gameLoop) {
+      clearInterval(this.gameLoop);
+    }
     const gameOver = document.querySelector('.game-over') as HTMLElement;
     if (gameOver) {
       gameOver.style.display = 'block';
@@ -72,15 +70,6 @@ export class Game {
     // or this.snake.nextPosition ?
     return (
       nextPos.x === this.food.position.x && nextPos.y === this.food.position.y
-    );
-  }
-
-  private gridCollision(nextPos: CoOrdinate) {
-    return (
-      nextPos.x < 0 ||
-      nextPos.y < 0 ||
-      nextPos.x >= this.gridWidth ||
-      nextPos.y >= this.gridWidth
     );
   }
 }

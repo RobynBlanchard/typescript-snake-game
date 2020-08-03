@@ -82,16 +82,26 @@ export class Snake {
     }
   }
 
-  willCollide(coOrdinate: CoOrdinate) {
+  willCollide(nextPos: CoOrdinate) {
+    return this.collideWithSelf(nextPos) || this.collideWithGrid(nextPos);
+  }
+
+  private collideWithSelf(nextPos: CoOrdinate) {
     for (var i = 0; i < this.snake.length; i++) {
-      if (
-        this.snake[i].x === coOrdinate.x &&
-        this.snake[i].y === coOrdinate.y
-      ) {
+      if (this.snake[i].x === nextPos.x && this.snake[i].y === nextPos.y) {
         return true;
       }
     }
     return false;
+  }
+
+  private collideWithGrid(nextPos: CoOrdinate) {
+    return (
+      nextPos.x < 0 ||
+      nextPos.y < 0 ||
+      nextPos.x >= this.canvas.width / this.canvas.cellWidth ||
+      nextPos.y >= this.canvas.height / this.canvas.cellWidth
+    );
   }
 
   private extendHead(newHead: CoOrdinate) {
