@@ -56,6 +56,12 @@ export class Game {
     }, 50);
   }
 
+  pause() {
+    if (this.gameLoop) {
+      clearInterval(this.gameLoop);
+    }
+  }
+
   endGame() {
     if (this.gameLoop) {
       clearInterval(this.gameLoop);

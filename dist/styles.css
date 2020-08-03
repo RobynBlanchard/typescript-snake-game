@@ -35,10 +35,11 @@ leaderboard ul {
   grid-area: score;
   border: none;
 }
-.pause {
+.game-control {
   grid-area: pause;
   text-align: right;
   border: none;
+  cursor: pointer;
 }
 .other {
   grid-area: other;
