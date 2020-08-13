@@ -1,9 +1,12 @@
 import { Canvas } from './Canvas';
 import { CoOrdinate } from './CoOrdinate';
+import { green } from './constants';
+
 export class Snake {
   snake: CoOrdinate[];
   direction: string;
   nextPosition: CoOrdinate;
+  color: string;
 
   constructor(public width: number, public canvas: Canvas) {
     this.snake = [
@@ -25,18 +28,24 @@ export class Snake {
       x: 3,
       y: 0,
     };
+    this.color = green;
   }
 
-  init() {
-    this.canvas.draw(this.snake.length, this.snake[this.snake.length - 1]);
+  grow() {
+    this.snake.unshift(Object.assign({}, this.nextPosition));
   }
 
-  extend() {
-    this.extendHead(this.nextPosition);
+  get tail() {
+    return this.snake[this.snake.length - 1];
   }
 
+  get length() {
+    return this.snake.length;
+  }
+
+  // better name ? shift?
   move() {
-    this.extendHead(this.nextPosition);
+    this.grow();
     this.removeTail();
   }
 
@@ -104,15 +113,7 @@ export class Snake {
     );
   }
 
-  private extendHead(newHead: CoOrdinate) {
-    this.snake.unshift(Object.assign({}, newHead));
-    this.canvas.draw(1, newHead);
-  }
-
   private removeTail() {
-    const tailCoOrd = this.snake.pop();
-    if (tailCoOrd) {
-      this.canvas.erase(tailCoOrd);
-    }
+    this.snake.pop();
   }
 }

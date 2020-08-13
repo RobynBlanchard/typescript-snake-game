@@ -1,4 +1,5 @@
 import { Canvas } from './Canvas';
+import { SnakeController } from './SnakeController';
 import { Snake } from './Snake';
 import { Food } from './Food';
 import { Score } from './Score';
@@ -15,6 +16,7 @@ export class Game {
   food: Food;
   score: Score;
   gameLoop: NodeJS.Timeout | undefined;
+  snakeController: SnakeController;
   constructor() {
     this.gridWidth = 30;
     this.gridSelector = '#canvas';
@@ -28,10 +30,12 @@ export class Game {
     this.snake = new Snake(this.cellWidth, this.canvas);
     this.food = new Food(this.canvas, this.snake);
     this.score = new Score();
+
+    this.snakeController = new SnakeController(this.snake, this.canvas);
   }
 
   init() {
-    this.snake.init();
+    this.snakeController.init();
     this.food.generate();
   }
 
@@ -45,13 +49,13 @@ export class Game {
       const nextPos = this.snake.getNextPosition();
 
       if (this.foodCollision(nextPos)) {
-        this.snake.extend();
+        this.snakeController.eat();
         this.food.generate();
         this.score.increment();
       } else if (this.snake.willCollide(nextPos)) {
         this.endGame();
       } else {
-        this.snake.move();
+        this.snakeController.move();
       }
     }, 50);
   }
