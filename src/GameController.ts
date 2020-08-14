@@ -4,7 +4,7 @@ import { Snake } from './Snake';
 import { Food } from './Food';
 import { Score } from './Score';
 import { CoOrdinate } from './CoOrdinate';
-
+import { CollisionDetector } from './CollisionDetector';
 // or interface Snake - method for move, collisin etc
 
 export class Game {
@@ -46,13 +46,25 @@ export class Game {
 
     // todo decrease time as game goes on
     this.gameLoop = setInterval(() => {
-      const nextPos = this.snake.getNextPosition();
+      this.snake.getNextPosition();
 
-      if (this.foodCollision(nextPos)) {
+      if (
+        CollisionDetector.foodCollision(
+          this.snake.nextPosition,
+          this.food.position
+        )
+      ) {
         this.snakeController.eat();
         this.food.generate();
         this.score.increment();
-      } else if (this.snake.willCollide(nextPos)) {
+      } else if (
+        CollisionDetector.snakeCollision(
+          this.snake.snake,
+          this.snake.nextPosition,
+          this.canvas.width / this.canvas.cellWidth,
+          this.canvas.height / this.canvas.cellWidth
+        )
+      ) {
         this.endGame();
       } else {
         this.snakeController.move();
@@ -74,12 +86,5 @@ export class Game {
     if (gameOver) {
       gameOver.style.display = 'block';
     }
-  }
-
-  private foodCollision(nextPos: CoOrdinate) {
-    // or this.snake.nextPosition ?
-    return (
-      nextPos.x === this.food.position.x && nextPos.y === this.food.position.y
-    );
   }
 }

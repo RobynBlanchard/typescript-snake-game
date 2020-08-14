@@ -1,7 +1,7 @@
 import { Canvas } from './Canvas';
 import { CoOrdinate } from './CoOrdinate';
 import { Snake } from './Snake';
-
+import { CollisionDetector } from './CollisionDetector';
 export class Food {
   position: CoOrdinate;
   color: string;
@@ -18,24 +18,21 @@ export class Food {
   }
 
   getCoOrdinates() {
-    const randomNum =
-      Math.round(
-        Math.floor(
-          Math.random() * (this.canvas.width - this.canvas.cellWidth)
-        ) / 10
-      );
+    const randomNum = Math.round(
+      Math.floor(Math.random() * (this.canvas.width - this.canvas.cellWidth)) /
+        10
+    );
 
     return randomNum;
   }
 
   checkCollision() {
-    if (this.snake.willCollide(this.position)) {
+    if (CollisionDetector.collideWithSelf(this.snake.snake, this.position)) {
       return this.generate();
     }
   }
 
   place() {
-    console.log('posss', this.position)
     this.canvas.draw(1, this.position, this.color);
   }
 }
