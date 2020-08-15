@@ -2,21 +2,15 @@ import { Game } from './Controllers/GameController';
 import { ScoreController } from './Controllers/ScoreController';
 import { FoodController } from './Controllers/FoodController';
 import { SnakeController } from './Controllers/SnakeController';
-import { Canvas } from './Views/Canvas';
+import { BoardController } from './Controllers/BoardController';
 
 window.addEventListener('load', (event) => {
-  const gridWidth = 30;
-  const gridSelector = '#canvas';
-  const cellWidth = 10;
-  const gameView = new Canvas(
-    gridWidth * cellWidth,
-    gridWidth * cellWidth,
-    gridSelector,
-    cellWidth
-  );
+
+  // pass cell into board and snake ??
+  const boardController = BoardController.init();
   const scoreController = ScoreController.init();
-  const foodController = FoodController.init(gameView);
-  const snakeController = SnakeController.init(gameView);
+  const foodController = FoodController.init(boardController);
+  const snakeController = SnakeController.init(boardController);
 
   const game = new Game(scoreController, foodController, snakeController);
   game.init();

@@ -7,7 +7,7 @@ export class Snake {
   currentDirection: string;
   color: string;
 
-  constructor(public width: number) {
+  constructor() {
     this.body = [
       {
         x: 2,

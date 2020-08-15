@@ -1,18 +1,18 @@
 import { Snake } from '../Models/Snake';
 import { Direction } from '../Direction';
-import { Canvas } from '../Views/Canvas';
 import { CoOrdinate } from '../CoOrdinate';
+import { BoardController } from './BoardController'; // todo interface ??
 import { Collision } from '../utils/Collision';
 
 export class SnakeController {
-  static init(gameView: Canvas): SnakeController {
-    return new SnakeController(new Snake(gameView.cellWidth), gameView);
+  static init(board: BoardController): SnakeController {
+    return new SnakeController(new Snake(), board);
   }
 
-  constructor(public snake: Snake, public gameView: Canvas) {}
+  constructor(public snake: Snake, public board: BoardController) {}
 
   initSnake() {
-    this.gameView.draw(this.snake.length, this.snake.tail, this.snake.color);
+    this.board.draw(this.snake.length, this.snake.tail, this.snake.color);
   }
 
   setDirection(e: KeyboardEvent) {
@@ -67,24 +67,19 @@ export class SnakeController {
 
   grow(nextPosition: CoOrdinate) {
     this.snake.addSegment(nextPosition);
-    this.gameView.draw(1, nextPosition, this.snake.color);
+    this.board.draw(1, nextPosition, this.snake.color);
   }
 
   willCollideWithCell(cell: CoOrdinate) {
     return (
-      Collision.withSnake(this.snake.body, cell) ||
-      Collision.withGrid(
-        cell,
-        this.gameView.width / this.gameView.cellWidth,
-        this.gameView.height / this.gameView.cellWidth
-      )
+      Collision.withSnake(this.snake.body, cell) || this.board.willCollide(cell)
     );
   }
 
   private removeTail() {
     const tail = this.snake.removeTail();
     if (tail) {
-      this.gameView.erase(tail);
+      this.board.erase(tail);
     }
   }
 }
