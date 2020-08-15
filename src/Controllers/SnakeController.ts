@@ -2,6 +2,7 @@ import { Snake } from '../Models/Snake';
 import { Direction } from '../Direction';
 import { Canvas } from '../Views/Canvas';
 import { CoOrdinate } from '../CoOrdinate';
+import { Collision } from '../utils/Collision';
 
 export class SnakeController {
   static init(gameView: Canvas): SnakeController {
@@ -67,6 +68,17 @@ export class SnakeController {
   grow(nextPosition: CoOrdinate) {
     this.snake.addSegment(nextPosition);
     this.gameView.draw(1, nextPosition, this.snake.color);
+  }
+
+  willCollideWithCell(cell: CoOrdinate) {
+    return (
+      Collision.withSnake(this.snake.body, cell) ||
+      Collision.withGrid(
+        cell,
+        this.gameView.width / this.gameView.cellWidth,
+        this.gameView.height / this.gameView.cellWidth
+      )
+    );
   }
 
   private removeTail() {

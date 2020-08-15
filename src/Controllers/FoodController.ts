@@ -1,6 +1,7 @@
 import { Food as FoodModel } from '../Models/Food';
 import { Canvas } from '../Views/Canvas';
 import { CoOrdinate } from '../CoOrdinate';
+import { Collision } from '../utils/Collision';
 
 export class FoodController {
   static init(gameView: Canvas): FoodController {
@@ -29,5 +30,9 @@ export class FoodController {
     );
 
     return randomNum;
+  }
+
+  willCollideWithCell(cell: CoOrdinate) {
+    return Collision.withFood(cell, this.food.position);
   }
 }

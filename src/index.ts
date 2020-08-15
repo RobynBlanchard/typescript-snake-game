@@ -18,7 +18,7 @@ window.addEventListener('load', (event) => {
   const foodController = FoodController.init(gameView);
   const snakeController = SnakeController.init(gameView);
 
-  const game = new Game(gameView, scoreController, foodController, snakeController);
+  const game = new Game(scoreController, foodController, snakeController);
   game.init();
   let isPlaying = false;
   const gameControlButton = document.querySelector('.game-control');
