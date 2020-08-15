@@ -1,12 +1,12 @@
-import { Canvas } from './Canvas';
+import { Canvas } from '../Views/Canvas';
 import { SnakeController } from './SnakeController';
-import { Snake } from './Snake';
-import { Food } from './Food';
-import { Score } from './Score';
+import { Snake } from '../Models/Snake';
+import { Food } from '../Models/Food';
+import { Score } from '../Models/Score';
 import { FoodController } from './FoodController';
 
-import { CoOrdinate } from './CoOrdinate';
-import { Collision } from './Collision';
+import { CoOrdinate } from '../CoOrdinate';
+import { Collision } from '../utils/Collision';
 // or interface Snake - method for move, collisin etc
 
 export class Game {
@@ -36,11 +36,13 @@ export class Game {
 
     this.score = new Score();
 
-    this.snakeController = new SnakeController(this.snake, this.canvas);
+    this.snakeController = new SnakeController(this.snake);
   }
 
   init() {
     this.foodController.place(this.snake.snake);
+
+    // observe snake changes, food position changes
   }
 
   updateGameLoop() {
@@ -53,14 +55,17 @@ export class Game {
       const nextPosition = this.snake.nextPosition;
 
       if (Collision.withFood(nextPosition, this.food.position)) {
-        this.snakeController.eat(nextPosition); // or should game controller update snake model? and snake controleller reponds to user input?
+        this.snake.grow(nextPosition);
         this.foodController.place(this.snake.snake);
         this.score.increment();
       } else if (this.snakeWillCrash(nextPosition)) {
         this.endGame();
       } else {
-        this.snakeController.move(nextPosition);
+        this.snake.grow(nextPosition);
+        this.snake.removeTail();
       }
+
+      // render
     }, 50);
   }
 

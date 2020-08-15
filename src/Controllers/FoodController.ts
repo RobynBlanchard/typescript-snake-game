@@ -1,7 +1,7 @@
-import { Canvas } from './Canvas';
-import { CoOrdinate } from './CoOrdinate';
-import { Food } from './Food';
-import { Collision } from './Collision';
+import { Canvas } from '../Views/Canvas';
+import { CoOrdinate } from '../CoOrdinate';
+import { Food } from '../Models/Food';
+import { Collision } from '../utils/Collision';
 
 export class FoodController {
   constructor(public food: Food, public canvas: Canvas) {}

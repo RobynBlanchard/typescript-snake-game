@@ -1,4 +1,4 @@
-import { CoOrdinate } from './CoOrdinate';
+import { CoOrdinate } from '../CoOrdinate';
 
 // initialise with grid boundary ??
 export class Collision {

@@ -1,7 +1,7 @@
-import { Canvas } from './Canvas';
-import { CoOrdinate } from './CoOrdinate';
-import { green } from './constants';
-import { Direction } from './Direction';
+import { Canvas } from '../Views/Canvas';
+import { CoOrdinate } from '../CoOrdinate';
+import { green } from '../constants';
+import { Direction } from '../Direction';
 
 export class Snake {
   snake: CoOrdinate[];
@@ -26,19 +26,6 @@ export class Snake {
     this.currentDirection = Direction.Right;
     this.color = green;
     this.canvas.draw(this.length, this.tail, this.color);
-  }
-
-  // set new snake length ?
-  grow(nextPosition: CoOrdinate) {
-    this.snake.unshift(Object.assign({}, nextPosition));
-    this.canvas.draw(1, nextPosition, this.color);
-  }
-
-  removeTail() {
-    const tail = this.snake.pop();
-    if (tail) {
-      this.canvas.erase(tail);
-    }
   }
 
   get tail() {
@@ -71,5 +58,15 @@ export class Snake {
     return nextHeadPosition;
   }
 
+  grow(nextPosition: CoOrdinate) {
+    this.snake.unshift(Object.assign({}, nextPosition));
+    this.canvas.draw(1, nextPosition, this.color);
+  }
 
+  removeTail() {
+    const tail = this.snake.pop();
+    if (tail) {
+      this.canvas.erase(tail);
+    }
+  }
 }

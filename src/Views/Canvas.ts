@@ -1,7 +1,9 @@
-import { CoOrdinate } from './CoOrdinate';
-import { green } from './constants';
+import { CoOrdinate } from '../CoOrdinate';
+import { green } from '../constants';
 
 // board
+
+// .. MVC
 
 export class Canvas {
   canvas: HTMLCanvasElement;

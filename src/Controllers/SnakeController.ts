@@ -1,10 +1,8 @@
-import { Snake } from './Snake';
-import { Canvas } from './Canvas';
-import { Direction } from './Direction';
-import { CoOrdinate } from './CoOrdinate';
+import { Snake } from '../Models/Snake';
+import { Direction } from '../Direction';
 
 export class SnakeController {
-  constructor(public snake: Snake, public canvas: Canvas) {}
+  constructor(public snake: Snake) {}
 
   setDirection(e: KeyboardEvent) {
     let inputDirection = e.key as Direction;
@@ -27,15 +25,5 @@ export class SnakeController {
     if (arrowKeyPressed && directionHasChanged && !inValidDirectionChange) {
       this.snake.currentDirection = inputDirection;
     }
-  }
-
-  move(nextPosition: CoOrdinate) {
-    this.snake.grow(nextPosition);
-    this.snake.removeTail();
-
-  }
-
-  eat(nextPosition: CoOrdinate) {
-    this.snake.grow(nextPosition);
   }
 }

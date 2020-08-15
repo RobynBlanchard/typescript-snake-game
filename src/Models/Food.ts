@@ -1,5 +1,5 @@
-import { Canvas } from './Canvas';
-import { CoOrdinate } from './CoOrdinate';
+import { Canvas } from '../Views/Canvas';
+import { CoOrdinate } from '../CoOrdinate';
 import { Snake } from './Snake';
 
 export class Food {
