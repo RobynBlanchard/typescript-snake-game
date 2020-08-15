@@ -3,8 +3,10 @@ import { SnakeController } from './SnakeController';
 import { Snake } from './Snake';
 import { Food } from './Food';
 import { Score } from './Score';
+import { FoodController } from './FoodController';
+
 import { CoOrdinate } from './CoOrdinate';
-import { CollisionDetector } from './CollisionDetector';
+import { Collision } from './Collision';
 // or interface Snake - method for move, collisin etc
 
 export class Game {
@@ -14,6 +16,7 @@ export class Game {
   canvas: Canvas;
   snake: Snake;
   food: Food;
+  foodController: FoodController;
   score: Score;
   gameLoop: NodeJS.Timeout | undefined;
   snakeController: SnakeController;
@@ -29,47 +32,47 @@ export class Game {
     );
     this.snake = new Snake(this.cellWidth, this.canvas);
     this.food = new Food(this.canvas, this.snake);
+    this.foodController = new FoodController(this.food, this.canvas);
+
     this.score = new Score();
 
     this.snakeController = new SnakeController(this.snake, this.canvas);
   }
 
   init() {
-    this.snakeController.init();
-    this.food.generate();
+    this.foodController.place(this.snake.snake);
   }
 
   updateGameLoop() {
     document.addEventListener('keydown', (e) => {
-      this.snake.setDirection(e);
+      this.snakeController.setDirection(e);
     });
 
     // todo decrease time as game goes on
     this.gameLoop = setInterval(() => {
-      this.snake.getNextPosition();
+      const nextPosition = this.snake.nextPosition;
 
-      if (
-        CollisionDetector.foodCollision(
-          this.snake.nextPosition,
-          this.food.position
-        )
-      ) {
-        this.snakeController.eat();
-        this.food.generate();
+      if (Collision.withFood(nextPosition, this.food.position)) {
+        this.snakeController.eat(nextPosition); // or should game controller update snake model? and snake controleller reponds to user input?
+        this.foodController.place(this.snake.snake);
         this.score.increment();
-      } else if (
-        CollisionDetector.snakeCollision(
-          this.snake.snake,
-          this.snake.nextPosition,
-          this.canvas.width / this.canvas.cellWidth,
-          this.canvas.height / this.canvas.cellWidth
-        )
-      ) {
+      } else if (this.snakeWillCrash(nextPosition)) {
         this.endGame();
       } else {
-        this.snakeController.move();
+        this.snakeController.move(nextPosition);
       }
     }, 50);
+  }
+
+  snakeWillCrash(nextPosition: CoOrdinate) {
+    return (
+      Collision.withSnake(this.snake.snake, nextPosition) ||
+      Collision.withGrid(
+        nextPosition,
+        this.canvas.width / this.canvas.cellWidth,
+        this.canvas.height / this.canvas.cellWidth
+      )
+    );
   }
 
   pause() {

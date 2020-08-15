@@ -1,6 +1,8 @@
 import { CoOrdinate } from './CoOrdinate';
 import { green } from './constants';
 
+// board
+
 export class Canvas {
   canvas: HTMLCanvasElement;
 

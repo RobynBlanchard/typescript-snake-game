@@ -1,22 +1,41 @@
 import { Snake } from './Snake';
 import { Canvas } from './Canvas';
+import { Direction } from './Direction';
+import { CoOrdinate } from './CoOrdinate';
 
 export class SnakeController {
   constructor(public snake: Snake, public canvas: Canvas) {}
 
-  init() {
-    // draw snake current state
-    this.canvas.draw(this.snake.length, this.snake.tail, this.snake.color);
+  setDirection(e: KeyboardEvent) {
+    let inputDirection = e.key as Direction;
+
+    const arrowKeyPressed =
+      [Direction.Left, Direction.Up, Direction.Down, Direction.Right].indexOf(
+        inputDirection
+      ) !== -1;
+    const directionHasChanged = inputDirection !== this.snake.currentDirection;
+    const inValidDirectionChange =
+      (this.snake.currentDirection === 'ArrowLeft' &&
+        inputDirection === 'ArrowRight') ||
+      (this.snake.currentDirection === 'ArrowRight' &&
+        inputDirection === 'ArrowLeft') ||
+      (this.snake.currentDirection === 'ArrowUp' &&
+        inputDirection === 'ArrowDown') ||
+      (this.snake.currentDirection === 'ArrowDown' &&
+        inputDirection === 'ArrowUp');
+
+    if (arrowKeyPressed && directionHasChanged && !inValidDirectionChange) {
+      this.snake.currentDirection = inputDirection;
+    }
   }
 
-  move() {
-    this.canvas.draw(1, this.snake.nextPosition, this.snake.color);
-    this.canvas.erase(this.snake.tail);
-    this.snake.move();
+  move(nextPosition: CoOrdinate) {
+    this.snake.grow(nextPosition);
+    this.snake.removeTail();
+
   }
 
-  eat() {
-    this.snake.grow();
-    this.canvas.draw(1, this.snake.nextPosition, this.snake.color);
+  eat(nextPosition: CoOrdinate) {
+    this.snake.grow(nextPosition);
   }
 }
