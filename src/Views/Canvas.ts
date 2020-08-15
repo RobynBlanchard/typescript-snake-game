@@ -1,5 +1,5 @@
 import { CoOrdinate } from '../CoOrdinate';
-import { green } from '../constants';
+import { green, white } from '../constants';
 
 // board
 
@@ -7,6 +7,7 @@ import { green } from '../constants';
 
 export class Canvas {
   canvas: HTMLCanvasElement;
+  fill: string;
 
   constructor(
     public width: number,
@@ -17,6 +18,7 @@ export class Canvas {
     this.canvas = document.documentElement.querySelector(
       this.canvasSelector
     ) as HTMLCanvasElement;
+    this.fill = white;
   }
 
   draw(length: number, headPosition: CoOrdinate, color: string = green) {
@@ -38,7 +40,7 @@ export class Canvas {
     if (this.canvas.getContext) {
       let ctx = this.canvas.getContext('2d');
       if (ctx) {
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = this.fill;
         ctx.fillRect(
           tailCoOrd.x * this.cellWidth,
           tailCoOrd.y * this.cellWidth,
@@ -48,15 +50,4 @@ export class Canvas {
       }
     }
   }
-
-  // removeTail() {
-  //   if (snake.length >= snakeLength) {
-  //         var whiteSquare = snake.pop();
-  //         drawBlob(
-  //           snakeWidth * whiteSquare.x,
-  //           snakeWidth * whiteSquare.y,
-  //           'rgb(255, 255, 255)'
-  //         );
-  //       }
-  // }
 }

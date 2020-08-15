@@ -1,11 +1,11 @@
 import { CoOrdinate } from '../CoOrdinate';
-
+import { red } from '../constants';
 export class Food {
   _position: CoOrdinate;
   color: string;
   constructor() {
     this._position = { x: 0, y: 0 };
-    this.color = '#ff0000';
+    this.color = red;
   }
 
   get position() {
