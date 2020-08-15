@@ -1,48 +1,23 @@
-import { Canvas } from '../Views/Canvas';
 import { SnakeController } from './SnakeController';
-import { Snake } from '../Models/Snake';
-import { Food } from '../Models/Food';
-import { Score } from '../Models/Score';
 import { FoodController } from './FoodController';
-
+import { ScoreController } from './ScoreController';
 import { CoOrdinate } from '../CoOrdinate';
 import { Collision } from '../utils/Collision';
-// or interface Snake - method for move, collisin etc
+import { Canvas } from '../Views/Canvas';
 
 export class Game {
-  gridWidth: number;
-  cellWidth: number;
-  gridSelector: string;
-  canvas: Canvas;
-  snake: Snake;
-  food: Food;
-  foodController: FoodController;
-  score: Score;
   gameLoop: NodeJS.Timeout | undefined;
-  snakeController: SnakeController;
-  constructor() {
-    this.gridWidth = 30;
-    this.gridSelector = '#canvas';
-    this.cellWidth = 10;
-    this.canvas = new Canvas(
-      this.gridWidth * this.cellWidth,
-      this.gridWidth * this.cellWidth,
-      this.gridSelector,
-      this.cellWidth
-    );
-    this.snake = new Snake(this.cellWidth, this.canvas);
-    this.food = new Food(this.canvas, this.snake);
-    this.foodController = new FoodController(this.food, this.canvas);
 
-    this.score = new Score();
-
-    this.snakeController = new SnakeController(this.snake);
-  }
+  constructor(
+    public gameView: Canvas,
+    public scoreController: ScoreController,
+    public foodController: FoodController,
+    public snakeController: SnakeController
+  ) {}
 
   init() {
-    this.foodController.place(this.snake.snake);
-
-    // observe snake changes, food position changes
+    this.placeFood();
+    this.snakeController.initSnake();
   }
 
   updateGameLoop() {
@@ -52,30 +27,36 @@ export class Game {
 
     // todo decrease time as game goes on
     this.gameLoop = setInterval(() => {
-      const nextPosition = this.snake.nextPosition;
+      const nextPosition = this.snakeController.getNextPosition();
 
-      if (Collision.withFood(nextPosition, this.food.position)) {
-        this.snake.grow(nextPosition);
-        this.foodController.place(this.snake.snake);
-        this.score.increment();
+      if (Collision.withFood(nextPosition, this.foodController.food.position)) {
+        this.snakeController.grow(nextPosition);
+        this.placeFood();
+        this.scoreController.updateScore();
       } else if (this.snakeWillCrash(nextPosition)) {
         this.endGame();
       } else {
-        this.snake.grow(nextPosition);
-        this.snake.removeTail();
+        this.snakeController.move(nextPosition);
       }
-
-      // render
     }, 50);
+  }
+
+  // move to food controller and pass in snake?
+  placeFood() {
+    let newPosition = this.foodController.generate();
+    while (Collision.withSnake(this.snakeController.snake.body, newPosition)) {
+      newPosition = this.foodController.generate();
+    }
+    this.foodController.place(newPosition);
   }
 
   snakeWillCrash(nextPosition: CoOrdinate) {
     return (
-      Collision.withSnake(this.snake.snake, nextPosition) ||
+      Collision.withSnake(this.snakeController.snake.body, nextPosition) ||
       Collision.withGrid(
         nextPosition,
-        this.canvas.width / this.canvas.cellWidth,
-        this.canvas.height / this.canvas.cellWidth
+        this.gameView.width / this.gameView.cellWidth,
+        this.gameView.height / this.gameView.cellWidth
       )
     );
   }

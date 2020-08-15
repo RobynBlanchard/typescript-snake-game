@@ -1,17 +1,17 @@
+import { Food as FoodModel } from '../Models/Food';
 import { Canvas } from '../Views/Canvas';
 import { CoOrdinate } from '../CoOrdinate';
-import { Food } from '../Models/Food';
-import { Collision } from '../utils/Collision';
 
 export class FoodController {
-  constructor(public food: Food, public canvas: Canvas) {}
+  static init(gameView: Canvas): FoodController {
+    return new FoodController(new FoodModel(), gameView);
+  }
 
-  place(snake: CoOrdinate[]) {
-    let newPosition = this.generate();
-    while (this.willCollide(snake, newPosition)) {
-      newPosition = this.generate();
-    }
+  constructor(public food: FoodModel, public gameView: Canvas) {}
+
+  place(newPosition: CoOrdinate) {
     this.food.position = newPosition;
+    this.gameView.draw(1, newPosition, this.food.color);
   }
 
   generate() {
@@ -23,15 +23,11 @@ export class FoodController {
 
   getCoOrdinates() {
     const randomNum = Math.round(
-      Math.floor(Math.random() * (this.canvas.width - this.canvas.cellWidth)) /
-        10
+      Math.floor(
+        Math.random() * (this.gameView.width - this.gameView.cellWidth)
+      ) / 10
     );
 
     return randomNum;
-  }
-
-  // or move to game controller?
-  willCollide(snake: CoOrdinate[], foodPosition: CoOrdinate) {
-    return Collision.withSnake(snake, foodPosition); /// just passing function in , not composing and delegating ?
   }
 }
