@@ -1,18 +1,18 @@
-import { Game } from './Controllers/GameController';
-import { ScoreController } from './Controllers/ScoreController';
-import { FoodController } from './Controllers/FoodController';
-import { SnakeController } from './Controllers/SnakeController';
-import { BoardController } from './Controllers/BoardController';
+import { Game } from './GameController';
+import { Board } from './Board';
+import { GameObject } from './GameObject';
+import { red } from './constants';
 
 window.addEventListener('load', (event) => {
+  const snake = new GameObject([
+    { x: 1, y: 0 },
+    { x: 0, y: 0 },
+  ]);
+  const food = new GameObject([{ x: 2, y: 10 }], red);
 
-  // pass cell into board and snake ??
-  const boardController = BoardController.init();
-  const scoreController = ScoreController.init();
-  const foodController = FoodController.init(boardController);
-  const snakeController = SnakeController.init(boardController);
+  const gameView = new Board();
 
-  const game = new Game(scoreController, foodController, snakeController);
+  const game = new Game(snake, food, gameView);
   game.init();
   let isPlaying = false;
   const gameControlButton = document.querySelector('.game-control');
