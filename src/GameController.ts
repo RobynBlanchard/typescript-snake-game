@@ -2,12 +2,13 @@ import { GameObject } from './GameObject';
 import { Board } from './Board';
 import { Coordinate } from './Coordinate';
 import { Direction } from './Direction';
+import { Snake } from './Snake';
 
 export class Game {
   gameLoop: NodeJS.Timeout | undefined;
 
   constructor(
-    public snake: GameObject,
+    public snake: Snake,
     public food: GameObject,
     public board: Board
   ) {}
@@ -67,7 +68,7 @@ export class Game {
     );
   }
 
-  private isSameCell(occupiedCell: Coordinate, nextPosition: Coordinate) {
+  isSameCell(occupiedCell: Coordinate, nextPosition: Coordinate) {
     return (
       nextPosition.x === occupiedCell.x && nextPosition.y === occupiedCell.y
     );
